@@ -93,6 +93,23 @@ const BigOverview = styled.p`
   top: -80px;
 `;
 
+const RightBtn = styled(motion.button)`
+  width: 60px;
+  height: 60px;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  background-color: ${(props) => props.theme.black.lighter};
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const rowVariants = {
   hidden: { x: window.outerWidth + 5 },
   visible: { x: 0 },
@@ -122,6 +139,13 @@ const infoVariants = {
       duration: 0.1,
       delay: 0.5,
     },
+  },
+};
+
+const buttonVariants = {
+  show: {
+    opacity: 0,
+    backgroundColor: 'rgba(0,0,0,0)',
   },
 };
 
@@ -164,6 +188,7 @@ function NowPlayingSlider({ data }: ISlider) {
     data?.results.find(
       (movie: any) => movie.id + '' === bigMovieMatch.params.movieId
     );
+  console.log();
 
   return (
     <>
@@ -177,6 +202,20 @@ function NowPlayingSlider({ data }: ISlider) {
             transition={{ type: 'tween', duration: 1 }}
             key={index}
           >
+            <RightBtn
+              variants={buttonVariants}
+              animate="show"
+              whileHover={{
+                opacity: 1,
+                backgroundColor: '#fff',
+                transition: {
+                  duration: 0.5,
+                },
+              }}
+              onClick={increaseIndex}
+            >
+              ▶
+            </RightBtn>
             {data?.results
               .slice(1)
               .slice(6 * index, 6 * index + 6)
@@ -221,7 +260,7 @@ function NowPlayingSlider({ data }: ISlider) {
                       )})`,
                     }}
                   />
-                  <BigTitle>{clickedMovie.title}asdfadsf</BigTitle>
+                  <BigTitle>{clickedMovie.title}</BigTitle>
                   <BigOverview>{clickedMovie.overview}</BigOverview>
                 </>
               )}

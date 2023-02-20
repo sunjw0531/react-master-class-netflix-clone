@@ -12,9 +12,11 @@ import {
   getLatestMovies,
   getMovies,
   getTopRatedMovies,
+  getUpComingMovies,
   IGetLatestMovies,
   IGetMoviesResult,
   ITopRatedMovies,
+  IUpComingMovies,
 } from '../api';
 import { makeImagePath } from '../utils';
 import TopLatedSlider from './Components/TopLatedSlider';
@@ -194,6 +196,10 @@ function Home() {
     ['topRated', 'topRatedMovies'],
     getTopRatedMovies
   );
+  const { data: upcoming } = useQuery<IUpComingMovies>(
+    ['upcoming', 'upcomingMovies'],
+    getUpComingMovies
+  );
   // index and pagination
   const [index, setIndex] = useState(0);
   const increaseIndex = () => {
@@ -272,6 +278,10 @@ function Home() {
           <Sliders>
             <p>Top Rated</p>
             <TopLatedSlider data={topRatedMovies as ITopRatedMovies} />
+          </Sliders>
+          <Sliders>
+            <p>UpComing</p>
+            <TopLatedSlider data={upcoming as IUpComingMovies} />
           </Sliders>
 
           {/* <AnimatePresence>

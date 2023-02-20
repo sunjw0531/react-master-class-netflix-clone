@@ -73,7 +73,7 @@ export function getLatestMovies() {
   );
 }
 
-export interface Result {
+interface Result {
   adult: boolean;
   backdrop_path: string;
   genre_ids: number[];
@@ -99,6 +99,25 @@ export interface ITopRatedMovies {
 
 export function getTopRatedMovies() {
   return fetch(`${BASE_PATH}/movie/top_rated?api_key=${API_KEY}&page=1`).then(
+    (res) => res.json()
+  );
+}
+
+interface Dates {
+  maximum: string;
+  minimum: string;
+}
+
+export interface IUpComingMovies {
+  dates: Dates;
+  page: number;
+  results: Result[];
+  total_pages: number;
+  total_results: number;
+}
+
+export function getUpComingMovies() {
+  return fetch(`${BASE_PATH}/movie/upcoming?api_key=${API_KEY}&page=1`).then(
     (res) => res.json()
   );
 }

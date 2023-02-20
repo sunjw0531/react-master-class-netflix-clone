@@ -7,12 +7,12 @@ import {
 import { useState } from 'react';
 import { PathMatch, useMatch, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { IGetMoviesResult, ITopRatedMovies } from '../../api';
+import { IGetMoviesResult, IUpComingMovies } from '../../api';
 import { makeImagePath } from '../../utils';
 
 const SliderDiv = styled.div`
   position: relative;
-  margin-top: 100px;
+  margin-top: 150px;
 `;
 
 const Row = styled(motion.div)`
@@ -93,6 +93,23 @@ const BigOverview = styled.p`
   top: -80px;
 `;
 
+const RightBtn = styled(motion.button)`
+  width: 60px;
+  height: 60px;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  background-color: ${(props) => props.theme.black.lighter};
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const rowVariants = {
   hidden: { x: window.outerWidth + 5 },
   visible: { x: 0 },
@@ -125,11 +142,18 @@ const infoVariants = {
   },
 };
 
+const buttonVariants = {
+  show: {
+    opacity: 0,
+    backgroundColor: 'rgba(0,0,0,0)',
+  },
+};
+
 interface ISlider {
-  data: ITopRatedMovies;
+  data: IUpComingMovies;
 }
 
-function SliderComponent({ data }: ISlider) {
+function UpComingSlider({ data }: ISlider) {
   const [leaving, setLeaving] = useState(false);
   const toggleLeaving = () => setLeaving((prev) => !prev);
   // set modal to center
@@ -164,6 +188,7 @@ function SliderComponent({ data }: ISlider) {
     data?.results.find(
       (movie: any) => movie.id + '' === bigMovieMatch.params.movieId
     );
+  console.log();
 
   return (
     <>
@@ -177,6 +202,20 @@ function SliderComponent({ data }: ISlider) {
             transition={{ type: 'tween', duration: 1 }}
             key={index}
           >
+            <RightBtn
+              variants={buttonVariants}
+              animate="show"
+              whileHover={{
+                opacity: 1,
+                backgroundColor: '#fff',
+                transition: {
+                  duration: 0.5,
+                },
+              }}
+              onClick={increaseIndex}
+            >
+              ▶
+            </RightBtn>
             {data?.results
               .slice(1)
               .slice(6 * index, 6 * index + 6)
@@ -233,4 +272,4 @@ function SliderComponent({ data }: ISlider) {
   );
 }
 
-export default SliderComponent;
+export default UpComingSlider;
