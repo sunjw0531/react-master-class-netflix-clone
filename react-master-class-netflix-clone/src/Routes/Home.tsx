@@ -8,8 +8,17 @@ import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { PathMatch, useMatch, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { getMovies, IGetMoviesResult } from '../api';
+import {
+  getLatestMovies,
+  getMovies,
+  getTopRatedMovies,
+  IGetLatestMovies,
+  IGetMoviesResult,
+  ITopRatedMovies,
+} from '../api';
 import { makeImagePath } from '../utils';
+import TopLatedSlider from './Components/TopLatedSlider';
+import NowPlayingSlider from './Components/NowPlayingSlider';
 const Wrapper = styled.div`
   background: black;
   overflow-x: hidden;
@@ -42,6 +51,10 @@ const Title = styled.h2`
 const OverView = styled.p`
   font-size: 30px;
   width: 50%;
+`;
+
+const Sliders = styled.div`
+  margin-bottom: 350px;
 `;
 
 const Slider = styled.div`
@@ -177,6 +190,10 @@ function Home() {
     ['movies', 'nowPlaying'],
     getMovies
   );
+  const { data: topRatedMovies } = useQuery<ITopRatedMovies>(
+    ['topRated', 'topRatedMovies'],
+    getTopRatedMovies
+  );
   // index and pagination
   const [index, setIndex] = useState(0);
   const increaseIndex = () => {
@@ -216,7 +233,7 @@ function Home() {
             <Title>{data?.results[0].title}</Title>
             <OverView>{data?.results[0].overview}</OverView>
           </Banner>
-          <Slider>
+          {/* <Slider>
             <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
               <Row
                 variants={rowVariants}
@@ -247,8 +264,17 @@ function Home() {
                   ))}
               </Row>
             </AnimatePresence>
-          </Slider>
-          <AnimatePresence>
+          </Slider> */}
+          <Sliders>
+            <p>Now Playing!</p>
+            <NowPlayingSlider data={data as IGetMoviesResult} />
+          </Sliders>
+          <Sliders>
+            <p>Top Rated</p>
+            <TopLatedSlider data={topRatedMovies as ITopRatedMovies} />
+          </Sliders>
+
+          {/* <AnimatePresence>
             {bigMovieMatch ? (
               <>
                 <Overlay
@@ -277,7 +303,7 @@ function Home() {
                 </BigMovie>
               </>
             ) : null}
-          </AnimatePresence>
+          </AnimatePresence> */}
         </>
       )}
     </Wrapper>
