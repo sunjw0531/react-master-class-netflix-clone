@@ -1,5 +1,11 @@
+import { useQuery } from 'react-query';
+import TVBanner from './Components/TV/TVBanner';
 function Tv() {
-  return <h1>tv</h1>;
+  return (
+    <>
+      <TVBanner />
+    </>
+  );
 }
 
 export default Tv;

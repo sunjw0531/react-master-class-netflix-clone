@@ -121,3 +121,35 @@ export function getUpComingMovies() {
     (res) => res.json()
   );
 }
+
+/////////////////////////
+//// TV API /////////////
+/////////////////////////
+export function getTVonair() {
+  return fetch(
+    `${BASE_PATH}/tv/on_the_air?api_key=${API_KEY}&language=ko&page1`
+  ).then((res) => res.json());
+}
+
+interface TVResult {
+  backdrop_path: string;
+  first_air_date: string;
+  genre_ids: number[];
+  id: number;
+  name: string;
+  origin_country: string[];
+  original_language: string;
+  original_name: string;
+  overview: string;
+  popularity: number;
+  poster_path: string;
+  vote_average: number;
+  vote_count: number;
+}
+
+export interface ITVonair {
+  page: number;
+  results: TVResult[];
+  total_pages: number;
+  total_results: number;
+}
