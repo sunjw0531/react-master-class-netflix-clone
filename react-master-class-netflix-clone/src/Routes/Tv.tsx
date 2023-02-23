@@ -10,7 +10,7 @@ function Tv() {
   return (
     <>
       <TVBanner />
-      <TVSlider data={TVonair as ITVonair} />
+      <TVSlider data={TVonair as ITVonair} category="On Air" />
     </>
   );
 }
