@@ -93,12 +93,12 @@ export default function TVSlider({ data, category }: IProp) {
           animate="show"
           exit="exit"
           transition={{ type: 'tween', duration: 1 }}
-          key={index}
+          key={category + index}
         >
           <PrevBtn
             onClick={prevIndex}
             variants={btnVariants}
-            initial="hidden"
+            animate="hidden"
             whileHover="show"
           />
           {data?.results
@@ -119,7 +119,7 @@ export default function TVSlider({ data, category }: IProp) {
           <NextBtn
             onClick={nextIndex}
             variants={btnVariants}
-            initial="hidden"
+            animate="hidden"
             whileHover="show"
           />
         </Slider>
