@@ -23,7 +23,6 @@ import TopLatedSlider from './Components/TopLatedSlider';
 import NowPlayingSlider from './Components/NowPlayingSlider';
 const Wrapper = styled.div`
   background: black;
-  overflow-x: hidden;
   padding-bottom: 200px;
 `;
 

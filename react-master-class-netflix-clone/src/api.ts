@@ -153,3 +153,9 @@ export interface ITVonair {
   total_pages: number;
   total_results: number;
 }
+
+export function getTVtoprated() {
+  return fetch(
+    `${BASE_PATH}/tv/top_rated?api_key=${API_KEY}&language=ko&page=1`
+  ).then((res) => res.json());
+}

@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import { getTVonair, ITVonair } from '../api';
+import { getTVonair, getTVtoprated, ITVonair } from '../api';
 import TVBanner from './Components/TV/TVBanner';
 import TVSlider from './Components/TV/TVSlider';
 function Tv() {
@@ -7,10 +7,12 @@ function Tv() {
     'TVonair',
     getTVonair
   );
+  const { data: TVtoprated } = useQuery<ITVonair>('TVtoprated', getTVtoprated);
   return (
     <>
       <TVBanner />
       <TVSlider data={TVonair as ITVonair} category="On Air" />
+      <TVSlider data={TVtoprated as ITVonair} category="Top Rated" />
     </>
   );
 }
