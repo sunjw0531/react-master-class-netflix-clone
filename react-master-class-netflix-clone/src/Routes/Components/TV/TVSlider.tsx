@@ -16,13 +16,14 @@ const TVTitle = styled.h1`
 `;
 
 const Slider = styled(motion.div)`
-  background-color: red;
-  display: flex;
-  position: relative;
+  display: grid;
+  gap: 5px;
+  grid-template-columns: repeat(6, 1fr);
+  position: absolute;
+  width: 100%;
 `;
 
 const TVProgram = styled(motion.div)<{ bgimage: string }>`
-  width: 500px;
   height: 200px;
   background-image: url(${(props) => props.bgimage});
   background-size: cover;
