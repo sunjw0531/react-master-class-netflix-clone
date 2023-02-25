@@ -57,9 +57,13 @@ const btnVariants = {
 };
 
 const sliderVariants = {
-  hidden: { x: window.outerWidth + 5 },
+  hidden: (next: boolean) => ({
+    x: next ? window.outerWidth + 5 : -window.outerWidth - 5,
+  }),
   show: { x: 0 },
-  exit: { x: -window.outerWidth - 5 },
+  exit: (next: boolean) => ({
+    x: next ? -window.outerWidth - 5 : window.outerWidth + 5,
+  }),
 };
 
 export default function TVSlider({ data, category }: IProp) {
@@ -67,6 +71,7 @@ export default function TVSlider({ data, category }: IProp) {
   // index change
   const [index, setIndex] = useState(0);
   const prevIndex = () => {
+    setNext(false);
     if (index === 0) {
       setIndex(page);
     } else {
@@ -74,26 +79,28 @@ export default function TVSlider({ data, category }: IProp) {
     }
   };
   const nextIndex = () => {
+    setNext(true);
     if (index === page) {
       setIndex(0);
     } else {
       setIndex((prev) => prev + 1);
     }
   };
-
+  const [next, setNext] = useState(true);
   const page = Math.floor(data?.results.length / contentperpage);
   console.log(index);
   return (
     <>
       <TVTitle>{category}</TVTitle>
-      <AnimatePresence>
+      <AnimatePresence initial={false} custom={next}>
         <Slider
+          custom={next}
           variants={sliderVariants}
           initial="hidden"
           animate="show"
           exit="exit"
           transition={{ type: 'tween', duration: 1 }}
-          key={category + index}
+          key={index}
         >
           <PrevBtn
             onClick={prevIndex}
@@ -109,10 +116,10 @@ export default function TVSlider({ data, category }: IProp) {
             .map((tv) => {
               return (
                 <TVProgram
-                  bgimage={makeImagePath(tv.backdrop_path)}
+                  bgimage={makeImagePath(tv.backdrop_path, 'w500')}
                   key={tv.id}
                 >
-                  {contentperpage}
+                  asdfasf
                 </TVProgram>
               );
             })}
