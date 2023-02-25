@@ -17,16 +17,17 @@ const TVTitle = styled.h1`
 
 const Slider = styled(motion.div)`
   display: grid;
-  gap: 5px;
+  gap: 7px;
   grid-template-columns: repeat(6, 1fr);
   position: absolute;
   width: 100%;
 `;
 
 const TVProgram = styled(motion.div)<{ bgimage: string }>`
-  height: 200px;
+  height: 150px;
   background-image: url(${(props) => props.bgimage});
   background-size: cover;
+  border-radius: 3px;
 `;
 
 const PrevBtn = styled(motion.div)`
@@ -91,7 +92,7 @@ export default function TVSlider({ data, category }: IProp) {
   const page = Math.floor(data?.results.length / contentperpage);
   console.log(index);
   return (
-    <>
+    <div style={{ marginBottom: '220px' }}>
       <TVTitle>{category}</TVTitle>
       <AnimatePresence initial={false} custom={next}>
         <Slider
@@ -117,11 +118,13 @@ export default function TVSlider({ data, category }: IProp) {
             .map((tv) => {
               return (
                 <TVProgram
-                  bgimage={makeImagePath(tv.backdrop_path, 'w500')}
+                  bgimage={
+                    tv.backdrop_path
+                      ? makeImagePath(tv.backdrop_path, 'w500')
+                      : makeImagePath(tv.poster_path, 'w500')
+                  }
                   key={tv.id}
-                >
-                  asdfasf
-                </TVProgram>
+                ></TVProgram>
               );
             })}
           <NextBtn
@@ -132,6 +135,6 @@ export default function TVSlider({ data, category }: IProp) {
           />
         </Slider>
       </AnimatePresence>
-    </>
+    </div>
   );
 }
