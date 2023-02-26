@@ -1,8 +1,8 @@
-import { AnimatePresence, motion } from 'framer-motion';
-import { useState } from 'react';
-import styled from 'styled-components';
-import { ITVonair } from '../../../api';
-import { makeImagePath } from '../../../utils';
+import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
+import styled from "styled-components";
+import { ITVonair } from "../../../api";
+import { makeImagePath } from "../../../utils";
 
 interface IProp {
   data: ITVonair;
@@ -28,6 +28,24 @@ const TVProgram = styled(motion.div)<{ bgimage: string }>`
   background-image: url(${(props) => props.bgimage});
   background-size: cover;
   border-radius: 3px;
+  cursor: pointer;
+  &:first-child {
+    transform-origin: center left;
+  }
+  &:last-child {
+    transform-origin: center right;
+  }
+`;
+
+const TVInfo = styled(motion.div)`
+  background-color: ${(props) => props.theme.black.veryDark};
+  opacity: 0;
+  font-size: 13px;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, -30%);
+  padding: 5px 10px;
 `;
 
 const PrevBtn = styled(motion.div)`
@@ -68,6 +86,23 @@ const sliderVariants = {
   }),
 };
 
+const tvprogramvariants = {
+  initial: {},
+  animate: {
+    transition: { delay: 0.5 },
+    scaleX: 1.2,
+    scaleY: 1.6,
+  },
+  exit: {},
+};
+
+const infovariants = {
+  animate: {
+    opacity: 1,
+    transition: { delay: 0.5 },
+  },
+};
+
 export default function TVSlider({ data, category }: IProp) {
   console.log(data?.results);
   // index change
@@ -92,7 +127,7 @@ export default function TVSlider({ data, category }: IProp) {
   const page = Math.floor(data?.results.length / contentperpage);
   console.log(index);
   return (
-    <div style={{ marginBottom: '220px' }}>
+    <div style={{ marginBottom: "220px" }}>
       <TVTitle>{category}</TVTitle>
       <AnimatePresence initial={false} custom={next}>
         <Slider
@@ -101,7 +136,7 @@ export default function TVSlider({ data, category }: IProp) {
           initial="hidden"
           animate="show"
           exit="exit"
-          transition={{ type: 'tween', duration: 1 }}
+          transition={{ type: "tween", duration: 1 }}
           key={index}
         >
           <PrevBtn
@@ -117,14 +152,21 @@ export default function TVSlider({ data, category }: IProp) {
             )
             .map((tv) => {
               return (
-                <TVProgram
-                  bgimage={
-                    tv.backdrop_path
-                      ? makeImagePath(tv.backdrop_path, 'w500')
-                      : makeImagePath(tv.poster_path, 'w500')
-                  }
-                  key={tv.id}
-                ></TVProgram>
+                <AnimatePresence>
+                  <TVProgram
+                    bgimage={
+                      tv.backdrop_path
+                        ? makeImagePath(tv.backdrop_path, "w500")
+                        : makeImagePath(tv.poster_path, "w500")
+                    }
+                    key={tv.id + category}
+                    transition={{ type: "tween" }}
+                    variants={tvprogramvariants}
+                    whileHover="animate"
+                  >
+                    <TVInfo variants={infovariants}>{tv.name}</TVInfo>
+                  </TVProgram>
+                </AnimatePresence>
               );
             })}
           <NextBtn
