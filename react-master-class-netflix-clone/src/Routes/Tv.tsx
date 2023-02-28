@@ -1,4 +1,6 @@
+import { motion } from 'framer-motion';
 import { useQuery } from 'react-query';
+import styled from 'styled-components';
 import { getTVonair, getTVtoprated, ITVonair } from '../api';
 import TVBanner from './Components/TV/TVBanner';
 import TVSlider from './Components/TV/TVSlider';

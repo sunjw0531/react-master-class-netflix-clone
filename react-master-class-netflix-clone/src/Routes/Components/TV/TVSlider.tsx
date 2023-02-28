@@ -1,8 +1,9 @@
-import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
-import styled from "styled-components";
-import { ITVonair } from "../../../api";
-import { makeImagePath } from "../../../utils";
+import { AnimatePresence, motion } from 'framer-motion';
+import { useState } from 'react';
+import { PathMatch, useMatch, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { ITVonair } from '../../../api';
+import { makeImagePath } from '../../../utils';
 
 interface IProp {
   data: ITVonair;
@@ -27,6 +28,7 @@ const TVProgram = styled(motion.div)<{ bgimage: string }>`
   height: 150px;
   background-image: url(${(props) => props.bgimage});
   background-size: cover;
+  background-position: center center;
   border-radius: 3px;
   cursor: pointer;
   &:first-child {
@@ -67,6 +69,22 @@ const NextBtn = styled(motion.div)`
   height: 100%;
 `;
 
+const TVModal = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+`;
+
+const TVDetail = styled(motion.div)`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+
 const btnVariants = {
   hidden: {
     opacity: 0,
@@ -87,11 +105,12 @@ const sliderVariants = {
 };
 
 const tvprogramvariants = {
-  initial: {},
+  initial: { scale: 1 },
   animate: {
     transition: { delay: 0.5 },
-    scaleX: 1.2,
-    scaleY: 1.6,
+    // scaleX: 1.2,
+    // scaleY: 1.6,
+    scale: 1.5,
   },
   exit: {},
 };
@@ -104,7 +123,6 @@ const infovariants = {
 };
 
 export default function TVSlider({ data, category }: IProp) {
-  console.log(data?.results);
   // index change
   const [index, setIndex] = useState(0);
   const prevIndex = () => {
@@ -125,9 +143,22 @@ export default function TVSlider({ data, category }: IProp) {
   };
   const [next, setNext] = useState(true);
   const page = Math.floor(data?.results.length / contentperpage);
-  console.log(index);
+
+  // navigate page
+  const [showDetail, setShowDetail] = useState(false);
+  const navigate = useNavigate();
+  const tvClicked = (id: number) => {
+    setShowDetail(true);
+    navigate(`${id}`);
+  };
+  // show detail
+  const urlNow: PathMatch<string> | null = useMatch(`/tv/:tvId`);
+  const findMatchedProgram =
+    urlNow?.params.tvId &&
+    data?.results.find((tv: any) => tv.id + '' === urlNow?.params.tvId);
+
   return (
-    <div style={{ marginBottom: "220px" }}>
+    <div style={{ marginBottom: '220px' }}>
       <TVTitle>{category}</TVTitle>
       <AnimatePresence initial={false} custom={next}>
         <Slider
@@ -136,7 +167,7 @@ export default function TVSlider({ data, category }: IProp) {
           initial="hidden"
           animate="show"
           exit="exit"
-          transition={{ type: "tween", duration: 1 }}
+          transition={{ type: 'tween', duration: 1 }}
           key={index}
         >
           <PrevBtn
@@ -156,13 +187,15 @@ export default function TVSlider({ data, category }: IProp) {
                   <TVProgram
                     bgimage={
                       tv.backdrop_path
-                        ? makeImagePath(tv.backdrop_path, "w500")
-                        : makeImagePath(tv.poster_path, "w500")
+                        ? makeImagePath(tv.backdrop_path, 'w500')
+                        : makeImagePath(tv.poster_path, 'w500')
                     }
                     key={tv.id + category}
-                    transition={{ type: "tween" }}
+                    transition={{ type: 'tween' }}
                     variants={tvprogramvariants}
                     whileHover="animate"
+                    onClick={() => tvClicked(tv.id)}
+                    layoutId={tv.id + category}
                   >
                     <TVInfo variants={infovariants}>{tv.name}</TVInfo>
                   </TVProgram>
@@ -176,6 +209,19 @@ export default function TVSlider({ data, category }: IProp) {
             whileHover="show"
           />
         </Slider>
+      </AnimatePresence>
+      <AnimatePresence>
+        {showDetail ? (
+          <>
+            <TVModal
+              onClick={() => navigate('/tv')}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              layoutId={urlNow?.params.tvId + category}
+            />
+            {findMatchedProgram ? <>asdf</> : null}
+          </>
+        ) : null}
       </AnimatePresence>
     </div>
   );
