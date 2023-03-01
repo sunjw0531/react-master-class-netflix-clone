@@ -1,4 +1,9 @@
-import { AnimatePresence, motion } from 'framer-motion';
+import {
+  AnimatePresence,
+  motion,
+  useScroll,
+  useTransform,
+} from 'framer-motion';
 import { useState } from 'react';
 import { PathMatch, useMatch, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -12,7 +17,7 @@ interface IProp {
 
 const contentperpage = 6;
 
-const TVTitle = styled.h1`
+const TVCategory = styled.h1`
   font-size: 50px;
 `;
 
@@ -79,10 +84,44 @@ const TVModal = styled(motion.div)`
 `;
 
 const TVDetail = styled(motion.div)`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  background-color: ${(props) => props.theme.black.lighter};
+  position: absolute;
+  width: 40vw;
+  height: 80vh;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  border-radius: 15px;
+`;
+
+const TVimage = styled.div`
+  width: 100%;
+  height: 400px;
+  background-size: cover;
+  background-position: center;
+`;
+
+const TVTitle = styled.div`
+  margin: 20px;
+  font-size: 30px;
+  display: flex;
+  align-items: center;
+`;
+
+const TVAirdate = styled.span`
+  font-size: 15px;
+  color: ${(props) => props.theme.red};
+  margin-left: 10px;
+  background-color: ${(props) => props.theme.white.darker};
+  padding: 2px;
+  border-radius: 5px;
+  font-weight: bold;
+`;
+const TVCountry = styled(TVAirdate)``;
+
+const TVOverview = styled.p`
+  margin: 20px;
+  font-size: 15px;
 `;
 
 const btnVariants = {
@@ -156,10 +195,12 @@ export default function TVSlider({ data, category }: IProp) {
   const findMatchedProgram =
     urlNow?.params.tvId &&
     data?.results.find((tv: any) => tv.id + '' === urlNow?.params.tvId);
-
+  console.log(findMatchedProgram);
+  const { scrollY } = useScroll();
+  const setScrollY = useTransform(scrollY, (value) => value + 100);
   return (
     <div style={{ marginBottom: '220px' }}>
-      <TVTitle>{category}</TVTitle>
+      <TVCategory>{category}</TVCategory>
       <AnimatePresence initial={false} custom={next}>
         <Slider
           custom={next}
@@ -214,12 +255,39 @@ export default function TVSlider({ data, category }: IProp) {
         {showDetail ? (
           <>
             <TVModal
-              onClick={() => navigate('/tv')}
+              onClick={() => {
+                navigate('/tv');
+                setShowDetail(false);
+              }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              layoutId={urlNow?.params.tvId + category}
             />
-            {findMatchedProgram ? <>asdf</> : null}
+            {findMatchedProgram && (
+              <TVDetail
+                style={{ top: setScrollY }}
+                layoutId={urlNow?.params.tvId + category}
+              >
+                <TVimage
+                  style={{
+                    backgroundImage: `linear-gradient(to top, black, transparent),url(${makeImagePath(
+                      findMatchedProgram.backdrop_path
+                    )})`,
+                  }}
+                />
+                <TVTitle>
+                  {findMatchedProgram.name}
+                  <TVAirdate>
+                    {findMatchedProgram.first_air_date.slice(0, 4)}
+                  </TVAirdate>
+                  <TVCountry>{findMatchedProgram.origin_country}</TVCountry>
+                </TVTitle>
+                <TVOverview>
+                  {findMatchedProgram.overview
+                    ? findMatchedProgram.overview
+                    : 'No Overview'}
+                </TVOverview>
+              </TVDetail>
+            )}
           </>
         ) : null}
       </AnimatePresence>
