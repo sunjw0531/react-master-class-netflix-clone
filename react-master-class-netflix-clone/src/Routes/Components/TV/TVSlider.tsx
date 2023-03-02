@@ -19,6 +19,7 @@ const contentperpage = 6;
 
 const TVCategory = styled.h1`
   font-size: 50px;
+  margin-bottom: 10px;
 `;
 
 const Slider = styled(motion.div)`
@@ -63,6 +64,12 @@ const PrevBtn = styled(motion.div)`
   height: 50px;
   bottom: 0;
   height: 100%;
+  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  cursor: pointer;
 `;
 const NextBtn = styled(motion.div)`
   background-color: pink;
@@ -72,6 +79,12 @@ const NextBtn = styled(motion.div)`
   height: 50px;
   bottom: 0;
   height: 100%;
+  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  cursor: pointer;
 `;
 
 const TVModal = styled(motion.div)`
@@ -216,7 +229,9 @@ export default function TVSlider({ data, category }: IProp) {
             variants={btnVariants}
             animate="hidden"
             whileHover="show"
-          />
+          >
+            ◀
+          </PrevBtn>
           {data?.results
             .slice(
               index * contentperpage,
@@ -248,7 +263,9 @@ export default function TVSlider({ data, category }: IProp) {
             variants={btnVariants}
             animate="hidden"
             whileHover="show"
-          />
+          >
+            ▶
+          </NextBtn>
         </Slider>
       </AnimatePresence>
       <AnimatePresence>

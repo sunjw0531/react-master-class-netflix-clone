@@ -159,3 +159,9 @@ export function getTVtoprated() {
     `${BASE_PATH}/tv/top_rated?api_key=${API_KEY}&language=ko&page=1`
   ).then((res) => res.json());
 }
+
+export function getTVpopular() {
+  return fetch(
+    `${BASE_PATH}/tv/popular?api_key=${API_KEY}&language=ko&page=1`
+  ).then((res) => res.json());
+}
