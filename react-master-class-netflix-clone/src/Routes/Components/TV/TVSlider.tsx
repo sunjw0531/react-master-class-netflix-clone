@@ -94,6 +94,7 @@ const TVModal = styled(motion.div)`
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   opacity: 0;
+  z-index: 98;
 `;
 
 const TVDetail = styled(motion.div)`
@@ -105,6 +106,7 @@ const TVDetail = styled(motion.div)`
   right: 0;
   margin: 0 auto;
   border-radius: 15px;
+  z-index: 99;
 `;
 
 const TVimage = styled.div`
