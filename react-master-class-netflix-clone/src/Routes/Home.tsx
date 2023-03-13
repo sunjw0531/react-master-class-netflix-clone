@@ -11,6 +11,7 @@ import styled from 'styled-components';
 import {
   getLatestMovies,
   getMovies,
+  getNowPlayingMovies,
   getTopRatedMovies,
   getUpComingMovies,
   IGetLatestMovies,
@@ -21,6 +22,7 @@ import {
 import { makeImagePath } from '../utils';
 import TopLatedSlider from './Components/TopLatedSlider';
 import NowPlayingSlider from './Components/NowPlayingSlider';
+import HomeSliderNowPlaying from './Components/Home/HomeSliderNowPlaying';
 const Wrapper = styled.div`
   background: black;
   padding-bottom: 200px;
@@ -187,6 +189,10 @@ function Home() {
   const { scrollY } = useScroll();
   const setScrollY = useTransform(scrollY, (value) => value + 100);
   // 'usequery' for get datas from api
+  const { data: MoviesNowPlaying } = useQuery<IGetMoviesResult>(
+    'MoviesNowPlaying',
+    getNowPlayingMovies
+  );
   const { data, isLoading } = useQuery<IGetMoviesResult>(
     ['movies', 'nowPlaying'],
     getMovies
@@ -238,38 +244,10 @@ function Home() {
             <Title>{data?.results[0].title}</Title>
             <OverView>{data?.results[0].overview}</OverView>
           </Banner>
-          {/* <Slider>
-            <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
-              <Row
-                variants={rowVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                transition={{ type: 'tween', duration: 1 }}
-                key={index}
-              >
-                {data?.results
-                  .slice(1)
-                  .slice(offset * index, offset * index + offset)
-                  .map((movie) => (
-                    <Box
-                      key={movie.id}
-                      variants={boxVariants}
-                      initial="normal"
-                      whileHover="hover"
-                      transition={{ type: 'tween' }}
-                      bgphoto={makeImagePath(movie.backdrop_path, 'w500')}
-                      onClick={() => onBoxClicked(movie.id)}
-                      layoutId={movie.id + ''}
-                    >
-                      <Info variants={infoVariants}>
-                        <h4>{movie.title}</h4>
-                      </Info>
-                    </Box>
-                  ))}
-              </Row>
-            </AnimatePresence>
-          </Slider> */}
+          <HomeSliderNowPlaying
+            data={MoviesNowPlaying as IGetMoviesResult}
+            category="NowPlaying"
+          />
           <Sliders>
             <p>Now Playing!</p>
             <NowPlayingSlider data={data as IGetMoviesResult} />

@@ -2,29 +2,55 @@ const API_KEY = '2eb91db2e2cd808cd6ca5f4d3c5a62e6';
 const BASE_PATH = 'https://api.themoviedb.org/3';
 
 // get now-playing movies
-interface IMovie {
-  id: number;
-  backdrop_path: string;
-  poster_path: string;
-  title: string;
-  overview: string;
-}
+// interface IMovie {
+//   id: number;
+//   backdrop_path: string;
+//   poster_path: string;
+//   title: string;
+//   overview: string;
+// }
+
+// export interface IGetMoviesResult {
+//   dates: {
+//     maximum: string;
+//     minimum: string;
+//   };
+//   page: number;
+//   results: IMovie[];
+//   total_pages: number;
+//   total_results: number;
+// }
 
 export interface IGetMoviesResult {
-  dates: {
-    maximum: string;
-    minimum: string;
-  };
+  dates: Dates;
   page: number;
-  results: IMovie[];
+  results: Result[];
   total_pages: number;
   total_results: number;
 }
 
 export function getMovies() {
-  return fetch(`${BASE_PATH}/movie/now_playing?api_key=${API_KEY}`).then(
-    (res) => res.json()
-  );
+  return fetch(
+    `${BASE_PATH}/movie/now_playing?api_key=${API_KEY}&language=ko&page=1`
+  ).then((res) => res.json());
+}
+
+export function getNowPlayingMovies() {
+  return fetch(
+    `${BASE_PATH}/movie/now_playing?api_key=${API_KEY}&language=ko&page=1`
+  ).then((res) => res.json());
+}
+
+export interface IPopularMovies {
+  page: number;
+  results: Result[];
+  total_pages: number;
+  total_results: number;
+}
+export function getPopularMovies() {
+  return fetch(
+    `${BASE_PATH}/movie/popular?api_key=${API_KEY}&language=ko&page=1`
+  ).then((res) => res.json());
 }
 
 // get latest movies
