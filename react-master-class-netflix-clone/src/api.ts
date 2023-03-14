@@ -41,7 +41,7 @@ export function getNowPlayingMovies() {
   ).then((res) => res.json());
 }
 
-export interface IPopularMovies {
+export interface IOtherMoviesResult {
   page: number;
   results: Result[];
   total_pages: number;
@@ -94,8 +94,8 @@ export interface IGetLatestMovies {
 }
 
 export function getLatestMovies() {
-  return fetch(`${BASE_PATH}/movie/latest?api_key=${API_KEY}`).then((res) =>
-    res.json()
+  return fetch(`${BASE_PATH}/movie/latest?api_key=${API_KEY}&language=ko`).then(
+    (res) => res.json()
   );
 }
 

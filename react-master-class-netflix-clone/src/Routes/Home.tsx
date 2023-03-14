@@ -10,19 +10,18 @@ import { PathMatch, useMatch, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import {
   getLatestMovies,
-  getMovies,
   getNowPlayingMovies,
   getTopRatedMovies,
   getUpComingMovies,
   IGetLatestMovies,
   IGetMoviesResult,
-  ITopRatedMovies,
-  IUpComingMovies,
+  IOtherMoviesResult,
 } from '../api';
 import { makeImagePath } from '../utils';
 import TopLatedSlider from './Components/TopLatedSlider';
 import NowPlayingSlider from './Components/NowPlayingSlider';
 import HomeSliderNowPlaying from './Components/Home/HomeSliderNowPlaying';
+import HomeSliderOther from './Components/Home/HomeSliderOther';
 const Wrapper = styled.div`
   background: black;
   padding-bottom: 200px;
@@ -189,47 +188,47 @@ function Home() {
   const { scrollY } = useScroll();
   const setScrollY = useTransform(scrollY, (value) => value + 100);
   // 'usequery' for get datas from api
+  const { data, isLoading } = useQuery<IGetLatestMovies>(
+    'LatestMovie',
+    getLatestMovies
+  );
   const { data: MoviesNowPlaying } = useQuery<IGetMoviesResult>(
     'MoviesNowPlaying',
     getNowPlayingMovies
   );
-  const { data, isLoading } = useQuery<IGetMoviesResult>(
-    ['movies', 'nowPlaying'],
-    getMovies
-  );
-  const { data: topRatedMovies } = useQuery<ITopRatedMovies>(
-    ['topRated', 'topRatedMovies'],
+  const { data: TopRatedMovies } = useQuery<IOtherMoviesResult>(
+    'TopRatedMovies',
     getTopRatedMovies
   );
-  const { data: upcoming } = useQuery<IUpComingMovies>(
-    ['upcoming', 'upcomingMovies'],
+  const { data: UpcomingMovies } = useQuery<IGetMoviesResult>(
+    'UpcomingMovies',
     getUpComingMovies
   );
   // index and pagination
-  const [index, setIndex] = useState(0);
-  const increaseIndex = () => {
-    if (data) {
-      if (leaving) return;
-      toggleLeaving();
-      const totalMovies = data?.results.length - 1;
-      const maxIndex = Math.floor(totalMovies / offset) - 1;
-      setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
-    }
-  };
+  // const [index, setIndex] = useState(0);
+  // const increaseIndex = () => {
+  //   if (data) {
+  //     if (leaving) return;
+  //     toggleLeaving();
+  //     const totalMovies = data?.results.length - 1;
+  //     const maxIndex = Math.floor(totalMovies / offset) - 1;
+  //     setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
+  //   }
+  // };
   // slider page moving
-  const [leaving, setLeaving] = useState(false);
-  const toggleLeaving = () => setLeaving((prev) => !prev);
+  // const [leaving, setLeaving] = useState(false);
+  // const toggleLeaving = () => setLeaving((prev) => !prev);
 
-  // overlay func
-  const onOverlayClick = () => {
-    navigate('/');
-  };
-  // clicked movie data
-  const clickedMovie =
-    bigMovieMatch?.params.movieId &&
-    data?.results.find(
-      (movie) => movie.id + '' === bigMovieMatch.params.movieId
-    );
+  // // overlay func
+  // const onOverlayClick = () => {
+  //   navigate('/');
+  // };
+  // // clicked movie data
+  // const clickedMovie =
+  //   bigMovieMatch?.params.movieId &&
+  //   data?.results.find(
+  //     (movie) => movie.id + '' === bigMovieMatch.params.movieId
+  //   );
 
   return (
     <Wrapper>
@@ -237,29 +236,36 @@ function Home() {
         <Loader>Loading...</Loader>
       ) : (
         <>
-          <Banner
-            onClick={increaseIndex}
-            bgphoto={makeImagePath(data?.results[0].backdrop_path || '')}
-          >
-            <Title>{data?.results[0].title}</Title>
-            <OverView>{data?.results[0].overview}</OverView>
+          <Banner bgphoto={makeImagePath(data?.backdrop_path || '')}>
+            <Title>{data?.title}</Title>
+            <OverView>
+              {data?.overview || 'This movie does not have overview'}
+            </OverView>
           </Banner>
           <HomeSliderNowPlaying
             data={MoviesNowPlaying as IGetMoviesResult}
             category="NowPlaying"
           />
-          <Sliders>
+          <HomeSliderOther
+            data={TopRatedMovies as IOtherMoviesResult}
+            category="TopRated"
+          />
+          <HomeSliderNowPlaying
+            data={UpcomingMovies as IGetMoviesResult}
+            category="UpComing"
+          />
+          {/* <Sliders>
             <p>Now Playing!</p>
             <NowPlayingSlider data={data as IGetMoviesResult} />
-          </Sliders>
-          <Sliders>
+          </Sliders> */}
+          {/* <Sliders>
             <p>Top Rated</p>
             <TopLatedSlider data={topRatedMovies as ITopRatedMovies} />
           </Sliders>
           <Sliders>
             <p>UpComing</p>
             <TopLatedSlider data={upcoming as IUpComingMovies} />
-          </Sliders>
+          </Sliders> */}
 
           {/* <AnimatePresence>
             {bigMovieMatch ? (
