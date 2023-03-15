@@ -1,25 +1,27 @@
 const API_KEY = '2eb91db2e2cd808cd6ca5f4d3c5a62e6';
 const BASE_PATH = 'https://api.themoviedb.org/3';
 
-// get now-playing movies
-// interface IMovie {
-//   id: number;
-//   backdrop_path: string;
-//   poster_path: string;
-//   title: string;
-//   overview: string;
-// }
+interface Dates {
+  maximum: string;
+  minimum: string;
+}
 
-// export interface IGetMoviesResult {
-//   dates: {
-//     maximum: string;
-//     minimum: string;
-//   };
-//   page: number;
-//   results: IMovie[];
-//   total_pages: number;
-//   total_results: number;
-// }
+interface Result {
+  adult: boolean;
+  backdrop_path: string;
+  genre_ids: number[];
+  id: number;
+  original_language: string;
+  original_title: string;
+  overview: string;
+  popularity: number;
+  poster_path: string;
+  release_date: string;
+  title: string;
+  video: boolean;
+  vote_average: number;
+  vote_count: number;
+}
 
 export interface IGetMoviesResult {
   dates: Dates;
@@ -27,12 +29,6 @@ export interface IGetMoviesResult {
   results: Result[];
   total_pages: number;
   total_results: number;
-}
-
-export function getMovies() {
-  return fetch(
-    `${BASE_PATH}/movie/now_playing?api_key=${API_KEY}&language=ko&page=1`
-  ).then((res) => res.json());
 }
 
 export function getNowPlayingMovies() {
@@ -99,47 +95,10 @@ export function getLatestMovies() {
   );
 }
 
-interface Result {
-  adult: boolean;
-  backdrop_path: string;
-  genre_ids: number[];
-  id: number;
-  original_language: string;
-  original_title: string;
-  overview: string;
-  popularity: number;
-  poster_path: string;
-  release_date: string;
-  title: string;
-  video: boolean;
-  vote_average: number;
-  vote_count: number;
-}
-
-export interface ITopRatedMovies {
-  page: number;
-  results: Result[];
-  total_pages: number;
-  total_results: number;
-}
-
 export function getTopRatedMovies() {
   return fetch(`${BASE_PATH}/movie/top_rated?api_key=${API_KEY}&page=1`).then(
     (res) => res.json()
   );
-}
-
-interface Dates {
-  maximum: string;
-  minimum: string;
-}
-
-export interface IUpComingMovies {
-  dates: Dates;
-  page: number;
-  results: Result[];
-  total_pages: number;
-  total_results: number;
 }
 
 export function getUpComingMovies() {
