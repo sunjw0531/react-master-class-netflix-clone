@@ -1,5 +1,5 @@
-const API_KEY = '2eb91db2e2cd808cd6ca5f4d3c5a62e6';
-const BASE_PATH = 'https://api.themoviedb.org/3';
+const API_KEY = "2eb91db2e2cd808cd6ca5f4d3c5a62e6";
+const BASE_PATH = "https://api.themoviedb.org/3";
 
 interface Dates {
   maximum: string;
@@ -149,4 +149,18 @@ export function getTVpopular() {
   return fetch(
     `${BASE_PATH}/tv/popular?api_key=${API_KEY}&language=ko&page=1`
   ).then((res) => res.json());
+}
+
+/////////////////////////
+//// Search API /////////////
+/////////////////////////
+
+export interface ISearch {
+  keyword?: string;
+}
+
+export function searchMovie({ keyword }: ISearch) {
+  return fetch(
+    `${BASE_PATH}/search/movie?api_key=${API_KEY}&language=ko&query=${keyword}&page=1&include_adult=true`
+  );
 }
