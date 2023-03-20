@@ -162,6 +162,13 @@ export interface ISearch {
 export function searchMovie({ queryKey }: any) {
   const [, keyword] = queryKey;
   return fetch(
-    `${BASE_PATH}/search/movie?api_key=${API_KEY}&language=ko&query=${keyword}&page=1&include_adult=true`
+    `${BASE_PATH}/search/movie?api_key=${API_KEY}&language=ko&query=${keyword}&page=1&include_adult=false`
+  ).then((res) => res.json());
+}
+
+export function searchTV({ queryKey }: any) {
+  const [, keyword] = queryKey;
+  return fetch(
+    `${BASE_PATH}/search/tv?api_key=${API_KEY}&language=ko&query=${keyword}&page=1&include_adult=false`
   ).then((res) => res.json());
 }
