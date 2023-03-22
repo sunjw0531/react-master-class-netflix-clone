@@ -164,7 +164,7 @@ function Search() {
     data?.results.find((tv: any) => tv.id + '' === urlNowTV?.params.tvId);
 
   const { scrollY } = useScroll();
-  const setScrollY = useTransform(scrollY, (value) => value + 100);
+  const setScrollY = useTransform(scrollY, (value : any) => value + 100);
 
   return (
     <>
@@ -181,7 +181,7 @@ function Search() {
                       : makeImagePath(movie.poster_path, 'w500')
                   }
                   key={movie.id}
-                  layoutId={movie.id}
+                  layoutId={movie.id+''}
                   transition={{ type: 'tween' }}
                   variants={movievariants}
                   whileHover="animate"
@@ -207,7 +207,7 @@ function Search() {
                       : makeImagePath(tv.poster_path, 'w500')
                   }
                   key={tv.id}
-                  // layoutId={tv.id}
+                  layoutId={tv.id+''}
                   transition={{ type: 'tween' }}
                   variants={movievariants}
                   whileHover="animate"
@@ -223,7 +223,7 @@ function Search() {
           {findMatchedMovie && (
             <MovieDetail
               style={{ top: setScrollY }}
-              layoutId={urlNowMovie?.params.movieId}
+              layoutId={urlNowMovie?.params.movieId + ''}
             >
               <Detailimage
                 style={{
@@ -255,7 +255,7 @@ function Search() {
         {findMatchedTV && (
           <MovieDetail
             style={{ top: setScrollY }}
-            // layoutId={urlNowMovie?.params.movieId}
+            layoutId={urlNowMovie?.params.movieId+''}
           >
             <Detailimage
               style={{
