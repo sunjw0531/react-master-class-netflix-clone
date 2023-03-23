@@ -164,7 +164,7 @@ function Search() {
     data?.results.find((tv: any) => tv.id + '' === urlNowTV?.params.tvId);
 
   const { scrollY } = useScroll();
-  const setScrollY = useTransform(scrollY, (value : any) => value + 100);
+  const setScrollY = useTransform(scrollY, (value: any) => value + 100);
 
   return (
     <>
@@ -181,7 +181,7 @@ function Search() {
                       : makeImagePath(movie.poster_path, 'w500')
                   }
                   key={movie.id}
-                  layoutId={movie.id+''}
+                  layoutId={movie.id + ''}
                   transition={{ type: 'tween' }}
                   variants={movievariants}
                   whileHover="animate"
@@ -207,7 +207,7 @@ function Search() {
                       : makeImagePath(tv.poster_path, 'w500')
                   }
                   key={tv.id}
-                  layoutId={tv.id+''}
+                  layoutId={tv.id + ''}
                   transition={{ type: 'tween' }}
                   variants={movievariants}
                   whileHover="animate"
@@ -219,43 +219,54 @@ function Search() {
             )
           );
         })}
-        <AnimatePresence>
-          {findMatchedMovie && (
-            <MovieDetail
-              style={{ top: setScrollY }}
-              layoutId={urlNowMovie?.params.movieId + ''}
-            >
-              <Detailimage
-                style={{
-                  backgroundImage: `linear-gradient(to top, black, transparent),url(${makeImagePath(
-                    findMatchedMovie.backdrop_path
-                  )})`,
-                }}
-              />
-              <DetailTitle>
-                {findMatchedMovie.title}
-                <DetailAirdate>
-                  {findMatchedMovie.release_date.slice(0, 4)}
-                </DetailAirdate>
-                <DetailCountry>
-                  {findMatchedMovie.original_language}
-                </DetailCountry>
-              </DetailTitle>
-              <DetailOverview>
-                {findMatchedMovie.overview
-                  ? findMatchedMovie.overview
-                  : 'No Overview'}
-              </DetailOverview>
-            </MovieDetail>
-          )}
-        </AnimatePresence>
       </Resultlist>
-
+      <AnimatePresence>
+        {showDetail ? (
+          <>
+            <MovieModal
+              onClick={() => {
+                navigate(`/search?keyword=${keyword}`);
+                setShowDetail(false);
+              }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            />
+            {findMatchedMovie && (
+              <MovieDetail
+                style={{ top: setScrollY }}
+                layoutId={urlNowMovie?.params.movieId + ''}
+              >
+                <Detailimage
+                  style={{
+                    backgroundImage: `linear-gradient(to top, black, transparent),url(${makeImagePath(
+                      findMatchedMovie.backdrop_path
+                    )})`,
+                  }}
+                />
+                <DetailTitle>
+                  {findMatchedMovie.title}
+                  <DetailAirdate>
+                    {findMatchedMovie.release_date.slice(0, 4)}
+                  </DetailAirdate>
+                  <DetailCountry>
+                    {findMatchedMovie.original_language}
+                  </DetailCountry>
+                </DetailTitle>
+                <DetailOverview>
+                  {findMatchedMovie.overview
+                    ? findMatchedMovie.overview
+                    : 'No Overview'}
+                </DetailOverview>
+              </MovieDetail>
+            )}
+          </>
+        ) : null}
+      </AnimatePresence>
       <AnimatePresence>
         {findMatchedTV && (
           <MovieDetail
             style={{ top: setScrollY }}
-            layoutId={urlNowMovie?.params.movieId+''}
+            layoutId={urlNowMovie?.params.movieId + ''}
           >
             <Detailimage
               style={{
