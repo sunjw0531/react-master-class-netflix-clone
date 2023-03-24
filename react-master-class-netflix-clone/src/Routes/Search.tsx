@@ -164,7 +164,7 @@ function Search() {
     );
   const findMatchedTV =
     urlNowTV?.params.tvId &&
-    data?.results.find((tv: any) => tv.id + '' === urlNowTV?.params.tvId);
+    SearchTV?.results.find((tv: any) => tv.id + '' === urlNowTV?.params.tvId);
 
   const { scrollY } = useScroll();
   const setScrollY = useTransform(scrollY, (value: any) => value + 100);
@@ -266,30 +266,46 @@ function Search() {
         ) : null}
       </AnimatePresence>
       <AnimatePresence>
-        {findMatchedTV && (
-          <MovieDetail
-            style={{ top: setScrollY }}
-            layoutId={urlNowMovie?.params.movieId + ''}
-          >
-            <Detailimage
-              style={{
-                backgroundImage: `linear-gradient(to top, black, transparent),url(${makeImagePath(
-                  findMatchedTV.backdrop_path
-                )})`,
+        {showDetail ? (
+          <>
+            <MovieModal
+              onClick={() => {
+                navigate(`/search?keyword=${keyword}`);
+                setShowDetail(false);
               }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
             />
-            <DetailTitle>
-              {findMatchedTV.title}
-              <DetailAirdate>
-                {findMatchedTV.release_date.slice(0, 4)}
-              </DetailAirdate>
-              <DetailCountry>{findMatchedTV.original_language}</DetailCountry>
-            </DetailTitle>
-            <DetailOverview>
-              {findMatchedTV.overview ? findMatchedTV.overview : 'No Overview'}
-            </DetailOverview>
-          </MovieDetail>
-        )}
+            {findMatchedTV && (
+              <MovieDetail
+                style={{ top: setScrollY }}
+                layoutId={urlNowTV?.params.tvId + ''}
+              >
+                <Detailimage
+                  style={{
+                    backgroundImage: `linear-gradient(to top, black, transparent),url(${makeImagePath(
+                      findMatchedTV.backdrop_path
+                    )})`,
+                  }}
+                />
+                <DetailTitle>
+                  {findMatchedTV.name}
+                  <DetailAirdate>
+                    {findMatchedTV.first_air_date.slice(0, 4)}
+                  </DetailAirdate>
+                  <DetailCountry>
+                    {findMatchedTV.original_language}
+                  </DetailCountry>
+                </DetailTitle>
+                <DetailOverview>
+                  {findMatchedTV.overview
+                    ? findMatchedTV.overview
+                    : 'No Overview'}
+                </DetailOverview>
+              </MovieDetail>
+            )}
+          </>
+        ) : null}
       </AnimatePresence>
     </>
   );
