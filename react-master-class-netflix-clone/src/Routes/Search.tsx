@@ -145,15 +145,18 @@ function Search() {
   const navigate = useNavigate();
   const movieClicked = (id: number) => {
     setShowDetail(true);
-    navigate(`movies/${id}`);
+    navigate(`/search/movies/${id}/?keyword=${keyword}`);
   };
 
   const tvClicked = (id: number) => {
     setShowDetail(true);
-    navigate(`tv/${id}`);
+    navigate(`/search/tv/${id}/?keyword=${keyword}`);
   };
-  const urlNowMovie: PathMatch<string> | null = useMatch(`/movies/:movieId`);
-  const urlNowTV: PathMatch<string> | null = useMatch(`/tv/:tvId`);
+  const urlNowMovie: PathMatch<string> | null = useMatch(
+    `/search/movies/:movieId`
+  );
+
+  const urlNowTV: PathMatch<string> | null = useMatch(`/search/tv/:tvId`);
   const findMatchedMovie =
     urlNowMovie?.params.movieId &&
     data?.results.find(
