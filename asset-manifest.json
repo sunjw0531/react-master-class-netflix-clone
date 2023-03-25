@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/react-master-class-netflix-clone/static/js/main.ca517b10.js",
+    "main.js": "/react-master-class-netflix-clone/static/js/main.f5f1bee3.js",
     "index.html": "/react-master-class-netflix-clone/index.html",
-    "main.ca517b10.js.map": "/react-master-class-netflix-clone/static/js/main.ca517b10.js.map"
+    "main.f5f1bee3.js.map": "/react-master-class-netflix-clone/static/js/main.f5f1bee3.js.map"
   },
   "entrypoints": [
-    "static/js/main.ca517b10.js"
+    "static/js/main.f5f1bee3.js"
   ]
 }
